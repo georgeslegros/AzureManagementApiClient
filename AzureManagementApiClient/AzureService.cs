@@ -8,10 +8,12 @@ namespace AzureManagementApiClient
         protected readonly IWriter Writer;
         private const string BaseUri = "https://management.core.windows.net";
         private readonly string subscriptionId;
+        private readonly X509Certificate certificate;
 
-        protected AzureService(string subscriptionId, IWriter writer)
+        protected AzureService(string subscriptionId, X509Certificate certificate, IWriter writer)
         {
             this.subscriptionId = subscriptionId;
+            this.certificate = certificate;
             Writer = writer;
         }
 
@@ -19,7 +21,6 @@ namespace AzureManagementApiClient
         {
             string uri = string.Format("{0}/{1}/services/{2}", BaseUri, subscriptionId, service);
             var request = (HttpWebRequest)WebRequest.Create(uri);
-            X509Certificate certificate = new X509Certificate(@"C:\testcert.cer");
             request.ClientCertificates.Add(certificate);
             request.Method = "GET";
             request.ContentType = "application/xml";

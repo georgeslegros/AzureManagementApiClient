@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 
 namespace AzureManagementApiClient
 {
     public class StorageServicesService : AzureService
     {
-        public StorageServicesService(string subscriptionId, IWriter writer)
-            : base(subscriptionId, writer)
-        {}
+        public StorageServicesService(string subscriptionId, X509Certificate certificate, IWriter writer)
+            : base(subscriptionId,certificate, writer)
+        { }
 
         public void GetStorageServices()
         {
