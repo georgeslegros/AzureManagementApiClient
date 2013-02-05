@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureManagementApiClient", "AzureManagementApiClient\AzureManagementApiClient.csproj", "{59039D8F-A6FD-49D7-9753-2BF94F667F02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiConsole", "ApiConsole\ApiConsole.csproj", "{EA90B926-D07C-4D2C-B3CC-2F8B48F2CBFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59039D8F-A6FD-49D7-9753-2BF94F667F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59039D8F-A6FD-49D7-9753-2BF94F667F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59039D8F-A6FD-49D7-9753-2BF94F667F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59039D8F-A6FD-49D7-9753-2BF94F667F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA90B926-D07C-4D2C-B3CC-2F8B48F2CBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA90B926-D07C-4D2C-B3CC-2F8B48F2CBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA90B926-D07C-4D2C-B3CC-2F8B48F2CBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA90B926-D07C-4D2C-B3CC-2F8B48F2CBFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
