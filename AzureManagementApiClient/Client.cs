@@ -15,5 +15,10 @@ namespace AzureManagementApiClient
         {
             storageServicesService.GetStorageServices();
         }
+
+        public void GetStorageService(string serviceName)
+        {
+            storageServicesService.GetStorageService(serviceName);
+        }
     }
 }

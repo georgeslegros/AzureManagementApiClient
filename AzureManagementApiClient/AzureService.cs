@@ -6,21 +6,21 @@ namespace AzureManagementApiClient
     public abstract class AzureService : BaseService
     {
         protected readonly IWriter Writer;
-        private const string BaseUri = "https://management.core.windows.net";
         private readonly string subscriptionId;
         private readonly X509Certificate certificate;
+        protected ServiceUri ServiceUri;
 
         protected AzureService(string subscriptionId, X509Certificate certificate, IWriter writer)
         {
             this.subscriptionId = subscriptionId;
             this.certificate = certificate;
             Writer = writer;
+            ServiceUri = new ServiceUri(subscriptionId);
         }
 
-        protected HttpWebRequest GetRequest(string service)
+        protected HttpWebRequest GetRequest(ServiceUri service)
         {
-            string uri = string.Format("{0}/{1}/services/{2}", BaseUri, subscriptionId, service);
-            var request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest)WebRequest.Create(service.ToString());
             request.ClientCertificates.Add(certificate);
             request.Method = "GET";
             request.ContentType = "application/xml";
@@ -28,5 +28,37 @@ namespace AzureManagementApiClient
 
             return request;
         }
+    }
+
+    public class ServiceUri
+    {
+        private const string BaseUri = "https://management.core.windows.net";
+        private string currentValue;
+
+        public ServiceUri(string subscriptionId)
+        {
+            currentValue = string.Format("{0}/{1}/services", BaseUri, subscriptionId);
+        }
+
+        private ServiceUri(string current, string newPart)
+        {
+            currentValue = string.Format("{0}/{1}", current, newPart);
+        }
+
+        public ServiceUri StorageServices()
+        {
+            return new ServiceUri(currentValue, "storageservices");
+        }
+
+        public ServiceUri StorageService(string serviceName)
+        {
+            return new ServiceUri(currentValue, serviceName);
+        }
+
+        public override string ToString()
+        {
+            return currentValue;
+        }
+
     }
 }

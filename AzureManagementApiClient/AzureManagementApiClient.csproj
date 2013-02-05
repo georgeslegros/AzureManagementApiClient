@@ -42,7 +42,10 @@
     <Compile Include="AzureService.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="IWriter.cs" />
+    <Compile Include="Model\StorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageServicesService.cs" />
   </ItemGroup>
