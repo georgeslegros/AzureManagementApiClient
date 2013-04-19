@@ -38,6 +38,39 @@ namespace AzureManagementApiClient
         }
     }
 
+	public class FirewallRulesService : AzureService
+	{
+		public FirewallRulesService(string subscriptionId, X509Certificate certificate, IWriter writer) 
+			: base(subscriptionId, certificate, writer)
+		{
+		}
+
+		public void GetFirewallRules(string serverName)
+		{
+			Writer.WriteLine("Getting rules for " + serverName);
+			var request = new ServerUri(subscriptionId, serverName).FirewallRules().CreateRequest(certificate);
+
+			var response = ExecuteRequest(request);
+			if (response.StatusCode == HttpStatusCode.OK)
+			{
+				var rules = response.DeserializeContent<List<FirewallRule>>();
+
+				foreach (var firewallRule in rules)
+				{
+					Writer.WriteLine(firewallRule.Name);
+				}
+				//return service;
+				Writer.WriteLine(response.StatusDescription);
+			
+			}
+			else
+			{
+				Writer.WriteLine(response.StatusDescription);
+			}
+			//return null;
+		}
+	}
+
     public class HostedServicesService : AzureService
     {
         public HostedServicesService(string subscriptionId, X509Certificate certificate, IWriter writer) 

@@ -6,9 +6,10 @@ namespace AzureManagementApiClient
     public abstract class AzureService : BaseService
     {
         protected readonly IWriter Writer;
-        private readonly string subscriptionId;
+        protected readonly string subscriptionId;
         protected readonly X509Certificate certificate;
         protected ServiceUri ServiceUri;
+        protected ServerUri ServerUri;
 
         protected AzureService(string subscriptionId, X509Certificate certificate, IWriter writer)
         {
@@ -28,7 +29,6 @@ namespace AzureManagementApiClient
 
             return request;
         }
-
     }
 
     public static class UriExtensions
@@ -76,7 +76,47 @@ namespace AzureManagementApiClient
             return string.Format("{0}/{1}/services", BaseUri, subscriptionId);
         }
     }
-    public class StorageServicesUri : IUri
+
+	public class ServerUri : IUri
+	{
+		private readonly string subscriptionId;
+		private readonly string serverName;
+		private const string BaseUri = "https://management.database.windows.net:8443";
+
+		public ServerUri(string subscriptionId, string serverName)
+		{
+			this.subscriptionId = subscriptionId;
+			this.serverName = serverName;
+		}
+
+		public FirewallRulesUri FirewallRules()
+		{
+			return new FirewallRulesUri(this);
+		}
+
+		public string Build()
+		{
+			return string.Format("{0}/{1}/servers/{2}", BaseUri, subscriptionId, serverName);
+		}
+	}
+
+	public class FirewallRulesUri : IUri
+	{
+		private readonly ServerUri serverUri;
+		private const string FirewallRulesPart = "firewallrules";
+
+		public FirewallRulesUri(ServerUri serverUri)
+		{
+			this.serverUri = serverUri;
+		}
+
+		public string Build()
+		{
+			return string.Format("{0}/{1}", serverUri.Build(), FirewallRulesPart);
+		}
+	}
+
+	public class StorageServicesUri : IUri
     {
         private readonly ServiceUri serviceUri;
         private const string StorageServicesPart = "storageservices";

@@ -10,9 +10,13 @@ namespace ApiConsole
         static void Main()
         {
             string subscriptionId = ConfigurationManager.AppSettings["subscriptionId"];
+            string serverName = ConfigurationManager.AppSettings["serverName"];
             Client client = new Client(subscriptionId, LoadCertificate(), new ConsoleWriter());
-            client.GetStorageServices();
-            client.GetStorageService("bre");
+			//client.GetStorageServices();
+			//client.GetStorageService("bre");
+			Console.WriteLine("BEFORE");
+			client.GetFirewallRules(serverName);
+			Console.WriteLine("AFTER");
             Console.ReadKey();
         }
 

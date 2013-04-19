@@ -47,19 +47,29 @@ namespace AzureManagementApiClient.Model
         //<StatusOfSecondary>Available|Unavailable</StatusOfSecondary>
     }
 
+	public class FirewallRule
+	{
+		public string Name { get; set; }
+		public string StartIpAddress { get; set; }
+		public string EndIpAddress { get; set; }
+
+//		<FirewallRules xmlns="http://schemas.microsoft.com/sqlazure/2010/12/">
+//  <FirewallRule>
+//	<Name>Firewall Rule Name</Name>
+//	<StartIpAddress>Start IP Addesss Range</StartIpAddress>
+//	<EndIpAddress>End IP address Range</EndIpAddress>
+//  </FirewallRule>
+//</FirewallRules>
+	}
+
    
     public enum Status
     {
         Creating,
-
         Created,
-
         Deleting,
-
         Deleted,
-
         Changing,
-
         ResolvingDns
     }
 }

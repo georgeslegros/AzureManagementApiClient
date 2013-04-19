@@ -7,7 +7,7 @@ namespace ApiConsole
     {
         public void WriteLine(string format)
         {
-            WriteLine(format, new object[] {});
+            Console.WriteLine(format);
         }
 
         public void WriteLine(string format, params object[] arg)
