@@ -12,7 +12,7 @@ namespace ApiConsole
             string subscriptionId = ConfigurationManager.AppSettings["subscriptionId"];
             Client client = new Client(subscriptionId, LoadCertificate(), new ConsoleWriter());
             client.GetStorageServices();
-
+            client.GetStorageService("bre");
             Console.ReadKey();
         }
 

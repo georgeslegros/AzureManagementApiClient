@@ -13,7 +13,7 @@ namespace AzureManagementApiClient
 
         public List<StorageService> GetStorageServices()
         {
-            var request = GetRequest(ServiceUri.StorageServices());
+            var request = ServiceUri.StorageServices().CreateRequest(certificate);
             var response = ExecuteRequest(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -26,7 +26,7 @@ namespace AzureManagementApiClient
 
         public StorageService GetStorageService(string serviceName)
         {
-            var request = GetRequest(ServiceUri.StorageServices().StorageService(serviceName));
+            var request = ServiceUri.StorageServices().StorageService(serviceName).CreateRequest(certificate);
     
             var response = ExecuteRequest(request);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -36,5 +36,24 @@ namespace AzureManagementApiClient
             }
             return null;
         }
+    }
+
+    public class HostedServicesService : AzureService
+    {
+        public HostedServicesService(string subscriptionId, X509Certificate certificate, IWriter writer) 
+            : base(subscriptionId, certificate, writer)
+        {
+        }
+
+        public List<HostedService> GetHostedServices()
+        {
+
+            return new List<HostedService>();
+        } 
+    }
+
+    public class HostedService
+    {
+        
     }
 }

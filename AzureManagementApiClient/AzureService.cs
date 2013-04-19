@@ -7,7 +7,7 @@ namespace AzureManagementApiClient
     {
         protected readonly IWriter Writer;
         private readonly string subscriptionId;
-        private readonly X509Certificate certificate;
+        protected readonly X509Certificate certificate;
         protected ServiceUri ServiceUri;
 
         protected AzureService(string subscriptionId, X509Certificate certificate, IWriter writer)
@@ -18,9 +18,9 @@ namespace AzureManagementApiClient
             ServiceUri = new ServiceUri(subscriptionId);
         }
 
-        protected HttpWebRequest GetRequest(ServiceUri service)
+        protected HttpWebRequest GetRequest(IUri service)
         {
-            var request = (HttpWebRequest)WebRequest.Create(service.ToString());
+            var request = (HttpWebRequest)WebRequest.Create(service.Build());
             request.ClientCertificates.Add(certificate);
             request.Method = "GET";
             request.ContentType = "application/xml";
@@ -28,37 +28,89 @@ namespace AzureManagementApiClient
 
             return request;
         }
+
     }
 
-    public class ServiceUri
+    public static class UriExtensions
     {
+        public static HttpWebRequest CreateRequest(this IUri uri)
+        {
+            var request = (HttpWebRequest)WebRequest.Create(uri.Build());
+            request.Method = "GET";
+            request.ContentType = "application/xml";
+            request.Headers.Add("x-ms-version", "2012-08-01");
+
+            return request;
+        }
+
+        public static HttpWebRequest CreateRequest(this IUri uri, X509Certificate certificate)
+        {
+            var request = uri.CreateRequest();
+            request.ClientCertificates.Add(certificate);
+            return request;
+        }
+    }
+
+    public interface IUri
+    {
+        string Build();
+    }
+
+    public class ServiceUri : IUri
+    {
+        private readonly string subscriptionId;
         private const string BaseUri = "https://management.core.windows.net";
-        private string currentValue;
 
         public ServiceUri(string subscriptionId)
         {
-            currentValue = string.Format("{0}/{1}/services", BaseUri, subscriptionId);
+            this.subscriptionId = subscriptionId;
         }
 
-        private ServiceUri(string current, string newPart)
+        public StorageServicesUri StorageServices()
         {
-            currentValue = string.Format("{0}/{1}", current, newPart);
+            return new StorageServicesUri(this);
         }
 
-        public ServiceUri StorageServices()
+        public string Build()
         {
-            return new ServiceUri(currentValue, "storageservices");
+            return string.Format("{0}/{1}/services", BaseUri, subscriptionId);
         }
+    }
+    public class StorageServicesUri : IUri
+    {
+        private readonly ServiceUri serviceUri;
+        private const string StorageServicesPart = "storageservices";
 
-        public ServiceUri StorageService(string serviceName)
+        public StorageServicesUri(ServiceUri serviceUri)
         {
-            return new ServiceUri(currentValue, serviceName);
+            this.serviceUri = serviceUri;
         }
 
-        public override string ToString()
+        public StorageServiceUri StorageService(string serviceName)
         {
-            return currentValue;
+            return new StorageServiceUri(this, serviceName);
         }
 
+        public string Build()
+        {
+            return string.Format("{0}/{1}", serviceUri.Build(), StorageServicesPart);
+        }
+    }
+
+    public class StorageServiceUri :IUri
+    {
+        private readonly StorageServicesUri storageServicesUri;
+        private readonly string serviceName;
+
+        public StorageServiceUri(StorageServicesUri storageServicesUri, string serviceName)
+        {
+            this.storageServicesUri = storageServicesUri;
+            this.serviceName = serviceName;
+        }
+
+        public string Build()
+        {
+            return string.Format("{0}/{1}", storageServicesUri.Build(), serviceName);
+        }
     }
 }
